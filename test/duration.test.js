@@ -26,3 +26,9 @@ test("formats durations", () => {
   assert.equal(formatDuration(250), "250ms");
   assert.equal(formatDuration(5_400_000), "1h 30m");
 });
+
+test("keeps leftover milliseconds when formatting", () => {
+  assert.equal(formatDuration(1_500), "1s 500ms");
+  assert.equal(formatDuration(61_001), "1m 1s 1ms");
+  assert.equal(parseDuration(formatDuration(1_500)), 1_500);
+});
