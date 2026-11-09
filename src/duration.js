@@ -11,7 +11,7 @@ export function parseDuration(text) {
   if (typeof text !== "string" || !text.trim()) throw new Error("Give a duration such as 90s or 1h 30m.");
   let total = 0;
   let matched = "";
-  for (const part of text.matchAll(/(\d+(?:\.\d+)?)\s*(d|h|m|s|ms)/g)) {
+  for (const part of text.matchAll(/(\d+(?:\.\d+)?)\s*(ms|d|h|m|s)/g)) {
     total += Number(part[1]) * UNITS[part[2]];
     matched += part[0];
   }
