@@ -58,3 +58,23 @@ test("keeps leftover milliseconds when formatting", () => {
   assert.equal(formatDuration(61_001), "1m 1s 1ms");
   assert.equal(parseDuration(formatDuration(1_500)), 1_500);
 });
+
+test("parses decimal amounts without floating-point error", () => {
+  // 1.001 * 1000 is 1000.9999999999999 in floating point, so the parser must not scale the decimal as a whole.
+  assert.equal(parseDuration("1.001s"), 1_001);
+  assert.equal(parseDuration("2.2h"), 7_920_000);
+  assert.equal(parseDuration("0.7m"), 42_000);
+  assert.equal(parseDuration("1.5ms"), 1.5);
+});
+
+test("formats fractional milliseconds without floating-point noise", () => {
+  // 1000.1 - 1000 is 0.10000000000002274 in floating point.
+  assert.equal(formatDuration(1_000.1), "1s 0.1ms");
+  assert.equal(formatDuration(61_001.25), "1m 1s 1.25ms");
+  assert.equal(formatDuration(1_000.5), "1s 0.5ms");
+  for (const text of ["2.2h", "1.001s", "1s 0.1ms"]) {
+    assert.equal(formatDuration(parseDuration(formatDuration(parseDuration(text)))), formatDuration(parseDuration(text)), text);
+  }
+  assert.equal(formatDuration(parseDuration("2.2h")), "2h 12m");
+  assert.ok(!formatDuration(1.5e21).includes("e"), "huge whole numbers have no fraction");
+});

@@ -2,7 +2,7 @@
   "name": "noverk-web-code-testbed",
   "version": "1.0.0",
   "private": true,
-  "description": "A small library Noverk Web Code practises on. It has one known bug with a failing test.",
+  "description": "A small duration library Noverk Web Code practises on.",
   "type": "module",
   "scripts": { "test": "node --test" },
   "engines": { "node": ">=20" }
